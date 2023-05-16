@@ -1,9 +1,12 @@
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable import/order */
+
+/* eslint-disable no-unused-vars */
+import { NavigationContainer } from '@react-navigation/native'
 import { createTheme, lightColors, ThemeProvider } from '@rneui/themed'
 import { Platform } from 'react-native'
 
-// eslint-disable-next-line no-unused-vars
 import App from 'src/App'
+import { AuthProvider } from 'src/context/Auth'
 
 const theme = createTheme({
   lightColors: {
@@ -20,6 +23,10 @@ const theme = createTheme({
 
 export default () => (
   <ThemeProvider theme={theme}>
-    <App />
+    <AuthProvider>
+      <NavigationContainer>
+        <App />
+      </NavigationContainer>
+    </AuthProvider>
   </ThemeProvider>
 )

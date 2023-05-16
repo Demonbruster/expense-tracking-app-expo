@@ -5,7 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Yup from 'yup'
 
 import { useAuth } from './context/Auth'
-import { User } from './utils/function'
 
 const styles = StyleSheet.create({
   container: {
@@ -26,29 +25,21 @@ const styles = StyleSheet.create({
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email().required(),
-  password: Yup.string().required()
+  password: Yup.string().required(),
+  cPassword: Yup.string().oneOf([Yup.ref('password'), ''], 'Passwords must match')
 })
 
-function Login() {
-  const { login } = useAuth()
+function Register() {
+  const { register } = useAuth()
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text h3> Sign In, Here </Text>
+        <Text h3> Sign Up, Here </Text>
       </View>
       <Formik
-        initialValues={{ email: '', password: '' }}
-        onSubmit={(values, { setSubmitting, setErrors }) => {
-          login(values.email, values.password).then((res: User[]) => {
-            if (res.length <= 0) {
-              setErrors({
-                email: 'Email or password is incorrect',
-                password: 'Email or password is incorrect'
-              })
-
-              setSubmitting(false)
-            }
-          })
+        initialValues={{ email: '', password: '', cPassword: '' }}
+        onSubmit={(values) => {
+          register(values.email, values.password)
         }}
         validationSchema={validationSchema}
       >
@@ -72,6 +63,15 @@ function Login() {
               label="Password"
               errorMessage={errors.password}
             />
+            <Input
+              onChangeText={handleChange('cPassword')}
+              onBlur={handleBlur('cPassword')}
+              value={values.cPassword}
+              secureTextEntry
+              placeholder="Confirm Password"
+              label="Confirm Password"
+              errorMessage={errors.cPassword}
+            />
             <View>
               <Button onPress={() => handleSubmit()} title="Submit" />
             </View>
@@ -82,4 +82,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Register
