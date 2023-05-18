@@ -2,6 +2,7 @@ import { AntDesign } from '@expo/vector-icons'
 import { Button, Divider, FAB, ListItem, Text } from '@rneui/themed'
 import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { useAuth } from './context/Auth'
@@ -106,7 +107,9 @@ function ExpenseDetailsScreen({ route, navigation }: { navigation: any; route: a
         {expenseBookDetails.length <= 0 ? (
           <EmptyExpenses />
         ) : (
-          <ExpenseList expenseBookDetails={expenseBookDetails} />
+          <ScrollView>
+            <ExpenseList expenseBookDetails={expenseBookDetails} />
+          </ScrollView>
         )}
       </View>
       <FAB style={styles.floatBtn} onPress={handleOpenModal}>

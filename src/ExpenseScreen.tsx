@@ -2,6 +2,7 @@
 import { Button, FAB, ListItem, Text } from '@rneui/themed'
 import React, { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { deleteExpenseBook, ExpenseBook, getAllExpenseBooks } from 'src/utils/function'
@@ -45,7 +46,14 @@ function ExpenseScreen({ navigation }: { navigation: any; route: any }) {
       {expenseBook.length <= 0 ? (
         <EmptyExpenseBook />
       ) : (
-        <ExpenseBookList expenseBook={expenseBook} navigation={navigation} />
+        <ScrollView
+          style={{
+            width: '100%',
+            height: '100%'
+          }}
+        >
+          <ExpenseBookList expenseBook={expenseBook} navigation={navigation} />
+        </ScrollView>
       )}
       <FAB style={styles.floatBtn} onPress={handleOpenModal}>
         <AntDesign name="plus" size={24} color="white" />

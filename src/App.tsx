@@ -33,8 +33,7 @@ export default function App(): ReactElement {
       case 'new':
         return <Register />
       case 'existing':
-        // return <Login />
-        return <Navigation />
+        return <Login />
       case 'logged-in':
         return <Navigation />
       default:
