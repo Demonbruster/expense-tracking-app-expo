@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react'
 
-import { createUser, getUserWithEmailAndPass, openDatabase } from 'src/utils/function'
+import { createUser, getUserWithEmailAndPass } from 'src/utils/function'
 
 type User = {
   email: string

@@ -1,11 +1,13 @@
-import { Button, Input, Text } from '@rneui/themed'
+import { Button } from '@rneui/base'
+import { Input, Text } from '@rneui/themed'
 import { Formik } from 'formik'
+import React, { useLayoutEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Yup from 'yup'
 
 import { useAuth } from './context/Auth'
-import { createExpenseBook } from './utils/function'
+import { createExpense, ExpenseBook } from './utils/function'
 
 const styles = StyleSheet.create({
   container: {
@@ -25,13 +27,21 @@ const styles = StyleSheet.create({
 })
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required(),
-  budget: Yup.number().required(),
+  amount: Yup.number().required(),
   description: Yup.string()
 })
 
-function AddExpenseBookModal({ navigation }: { navigation: any }) {
+function AddExpenseModal({ route, navigation }: { navigation: any; route: any }) {
+  const { expenseBook } = route.params as { expenseBook: ExpenseBook }
   const { setWantToRefresh } = useAuth()
+
+  //Change the header title
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'New expense for ' + expenseBook.name
+    })
+  }, [expenseBook.name, navigation])
+
   return (
     <SafeAreaView>
       <View style={styles.titleContainer}>
@@ -42,19 +52,23 @@ function AddExpenseBookModal({ navigation }: { navigation: any }) {
           }}
         >
           {' '}
-          New Book
+          New Expense
         </Text>
       </View>
       <Formik
-        initialValues={{ name: '', budget: '', description: '' }}
+        initialValues={{
+          amount: '',
+          description: ''
+        }}
         onSubmit={(values) => {
-          createExpenseBook({
-            name: values.name,
-            budget: Number(values.budget),
-            description: values.description
+          createExpense({
+            amount: Number(values.amount),
+            description: values.description,
+            date: new Date().toDateString(),
+            expense_book_id: (expenseBook.id as number) ?? 0
           }).then((res) => {
             setWantToRefresh(true)
-            navigation.navigate('Expense')
+            navigation.goBack()
           })
         }}
         validationSchema={validationSchema}
@@ -62,29 +76,21 @@ function AddExpenseBookModal({ navigation }: { navigation: any }) {
         {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
           <View style={styles.formContainer}>
             <Input
-              onChangeText={handleChange('name')}
-              onBlur={handleBlur('name')}
-              value={values.name}
-              label="Name"
-              placeholder="Name"
-              errorMessage={errors.name}
-            />
-            <Input
-              onChangeText={handleChange('budget')}
-              onBlur={handleBlur('budget')}
-              value={values.budget}
-              label="Budget"
-              placeholder="Budget"
-              errorMessage={errors.budget}
+              placeholder="Amount"
+              onChangeText={handleChange('amount')}
+              onBlur={handleBlur('amount')}
+              value={values.amount}
+              errorMessage={errors.amount}
               keyboardType="numeric"
+              label="Amount"
             />
             <Input
+              placeholder="Description"
               onChangeText={handleChange('description')}
               onBlur={handleBlur('description')}
               value={values.description}
-              label="Description"
-              placeholder="Description"
               errorMessage={errors.description}
+              label="Description"
             />
             <Button onPress={() => handleSubmit()}>Submit</Button>
           </View>
@@ -94,4 +100,4 @@ function AddExpenseBookModal({ navigation }: { navigation: any }) {
   )
 }
 
-export default AddExpenseBookModal
+export default AddExpenseModal

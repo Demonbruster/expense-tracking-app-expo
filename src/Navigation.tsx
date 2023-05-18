@@ -5,9 +5,10 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Ionicons from '@expo/vector-icons/AntDesign'
 
 import AddExpenseBookModal from './AddExpenseBookModal'
+import AddExpenseModal from './AddExpenseModal'
+import ExpenseDetailsScreen from './ExpenseDetailsScreen'
 import ExpenseScreen from './ExpenseScreen'
 import HomeScreen from './HomeScreen'
-import ExpenseDetailsScreen from './ExpenseDetailsScreen'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
@@ -56,6 +57,13 @@ function Navigation() {
         <Stack.Screen
           name="AddExpenseBookModal"
           component={AddExpenseBookModal}
+          options={{
+            title: 'Add Expense Book'
+          }}
+        />
+        <Stack.Screen
+          name="AddExpenseModal"
+          component={AddExpenseModal}
           options={{
             title: 'Add Expense Book'
           }}

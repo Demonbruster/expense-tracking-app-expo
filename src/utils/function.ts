@@ -153,3 +153,61 @@ export const deleteExpenseBook = (id: number) => {
     })
   })
 }
+
+export const createExpense = ({
+  amount,
+  date,
+  description,
+  expense_book_id
+}: {
+  amount: number
+  date: string
+  description: string
+  expense_book_id: number
+}) => {
+  const db = openDatabase()
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        'INSERT INTO expense (amount, date, description, expense_book_id) VALUES (?, ?, ?, ?)',
+        [amount, date, description, expense_book_id],
+        (_, { insertId, rows }) => {
+          resolve(insertId)
+        }
+      )
+    })
+  })
+}
+
+export const getAllExpenses = () => {
+  const db = openDatabase()
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql('SELECT * FROM expense', [], (_, { rows }) => {
+        resolve(rows._array)
+      })
+    })
+  }) as Promise<Expense[]>
+}
+
+export const getExpensesByExpenseBookId = (id: number) => {
+  const db = openDatabase()
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql('SELECT * FROM expense WHERE expense_book_id = ?', [id], (_, { rows }) => {
+        resolve(rows._array)
+      })
+    })
+  }) as Promise<Expense[]>
+}
+
+export const deleteExpense = (id: number) => {
+  const db = openDatabase()
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql('DELETE FROM expense WHERE id = ?', [id], (_, { rows }) => {
+        resolve(rows._array)
+      })
+    })
+  })
+}
