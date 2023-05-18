@@ -31,12 +31,8 @@
     "typescript",
     "template"
   ],
-  "author": "Vladimir Vovk",
+  "author": "FM_Suhail",
   "license": "MIT",
-  "homepage": "https://github.com/vladimir-vovk/expo-ts",
-  "bugs": {
-    "url": "https://github.com/vladimir-vovk/expo-ts/issues"
-  },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
     "@react-native-masked-view/masked-view": "0.2.8",
