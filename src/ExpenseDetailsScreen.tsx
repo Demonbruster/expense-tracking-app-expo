@@ -126,10 +126,15 @@ const EmptyExpenses = () => {
 }
 
 const ExpenseList = ({ expenseBookDetails }: { expenseBookDetails: Expense[] }) => {
-  const handleDelete = useCallback((id: number) => {
-    if (id === 0) return
-    deleteExpense(id)
-  }, [])
+  const { setWantToRefresh } = useAuth()
+  const handleDelete = useCallback(
+    (id: number) => {
+      if (id === 0) return
+      deleteExpense(id)
+      setWantToRefresh(true)
+    },
+    [setWantToRefresh]
+  )
 
   return (
     <>
